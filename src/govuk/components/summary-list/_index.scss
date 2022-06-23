@@ -141,6 +141,7 @@
   }
 
   .govuk-summary-list__card {
+    @include govuk-responsive-margin(6, "bottom");
     border: 1px solid $govuk-border-colour;
   }
 
@@ -157,20 +158,17 @@
 
   .govuk-summary-list__card-title {
     @include govuk-font($size: 19, $weight: bold);
-    margin: 0 0 10px;
-
-    @include govuk-media-query($from: "tablet") {
-      margin: 0;
-    }
+    margin: 0;
   }
 
   .govuk-summary-list__card-actions-list {
-    margin: 0;
+    margin: govuk-spacing(2) 0 0;
     padding: 0;
     list-style: none;
 
     @include govuk-media-query($from: "tablet") {
       display: flex;
+      margin: 0;
     }
   }
 
@@ -191,7 +189,7 @@
   }
 
   .govuk-summary-list__card-content {
-    padding: govuk-spacing(3) govuk-spacing(4) govuk-spacing(2);
+    padding: govuk-spacing(3) govuk-spacing(3) 0;
 
     @include govuk-media-query($from: "tablet") {
       padding: govuk-spacing(3) govuk-spacing(4);
