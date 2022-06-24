@@ -25,13 +25,6 @@ describe('Error-summary', () => {
       expect(ariaAttr).toEqual('error-summary-title')
     })
 
-    it('has role=alert attribute', () => {
-      const $ = render('error-summary', examples.default)
-      const roleAttr = $('.govuk-error-summary').attr('role')
-
-      expect(roleAttr).toEqual('alert')
-    })
-
     it('renders title text', () => {
       const $ = render('error-summary', examples.default)
       const summaryTitle = $('.govuk-error-summary__title').text().trim()
