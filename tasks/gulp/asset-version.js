@@ -1,7 +1,7 @@
 'use strict'
 
 const configPaths = require('../../config/paths.json')
-const gulp = require('gulp')
+const { src, dest } = require('gulp')
 const fs = require('fs')
 const taskArguments = require('./task-arguments')
 const gulpif = require('gulp-if')
@@ -16,10 +16,10 @@ const isDist = taskArguments.destination === 'dist' || false
 // Update assets' versions ----------
 // Add all.package.json version
 // ----------------------------------
-gulp.task('update-assets-version', () => {
+function updateAssetsVersion () {
   const pkg = require('../../' + configPaths.package + 'package.json')
   fs.writeFileSync(taskArguments.destination + '/VERSION.txt', pkg.version + '\r\n')
-  return gulp.src([
+  return src([
     taskArguments.destination + '/govuk-frontend.min.css',
     taskArguments.destination + '/govuk-frontend-ie8.min.css',
     taskArguments.destination + '/govuk-frontend.min.js'
@@ -31,5 +31,7 @@ gulp.task('update-assets-version', () => {
         return obj
       })
     ))
-    .pipe(gulp.dest(taskArguments.destination + '/'))
-})
+    .pipe(dest(taskArguments.destination + '/'))
+}
+
+exports.updateAssetsVersion = updateAssetsVersion

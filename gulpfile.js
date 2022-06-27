@@ -13,7 +13,7 @@ require('./tasks/gulp/nodemon.js')
 require('./tasks/gulp/watch.js')
 // new tasks
 require('./tasks/gulp/copy-to-destination.js')
-require('./tasks/gulp/asset-version.js')
+const { updateAssetsVersion } = require('./tasks/gulp/asset-version.js')
 require('./tasks/gulp/sassdoc.js')
 
 // Umbrella scripts tasks for preview ---
@@ -82,7 +82,7 @@ gulp.task('build:dist', gulp.series(
   clean,
   'copy-assets',
   'copy:assets',
-  'update-assets-version'
+  updateAssetsVersion
 ))
 
 // Default task -------------------------
