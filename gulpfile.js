@@ -10,7 +10,7 @@ const { clean } = require('./tasks/gulp/clean.js')
 require('./tasks/gulp/compile-assets.js')
 require('./tasks/gulp/lint.js')
 require('./tasks/gulp/nodemon.js')
-require('./tasks/gulp/watch.js')
+const { watchFiles } = require('./tasks/gulp/watch.js')
 // new tasks
 require('./tasks/gulp/copy-to-destination.js')
 const { updateAssetsVersion } = require('./tasks/gulp/asset-version.js')
@@ -54,7 +54,7 @@ gulp.task('copy-assets', gulp.series(
 // affecting js, css or njk files
 // --------------------------------------
 gulp.task('serve', gulp.parallel(
-  'watch',
+  watchFiles,
   'nodemon'
 ))
 
