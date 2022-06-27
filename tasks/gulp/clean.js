@@ -1,6 +1,5 @@
 'use strict'
 
-const gulp = require('gulp')
 const taskArguments = require('./task-arguments')
 const del = require('del')
 
@@ -8,8 +7,7 @@ const del = require('del')
 // Removes all old files, except for package.json
 // and README in all package
 // ------------------------------------------------------
-
-gulp.task('clean', () => {
+function clean () {
   const destination = taskArguments.destination
 
   if (destination === 'package') {
@@ -25,4 +23,6 @@ gulp.task('clean', () => {
       `${destination}/**/*`
     ])
   }
-})
+}
+
+exports.clean = clean

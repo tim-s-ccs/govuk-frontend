@@ -6,7 +6,7 @@ const taskListing = require('gulp-task-listing')
 const taskArguments = require('./tasks/gulp/task-arguments')
 
 // Gulp sub-tasks
-require('./tasks/gulp/clean.js')
+const { clean } = require('./tasks/gulp/clean.js')
 require('./tasks/gulp/compile-assets.js')
 require('./tasks/gulp/lint.js')
 require('./tasks/gulp/nodemon.js')
@@ -62,7 +62,7 @@ gulp.task('serve', gulp.parallel(
 // Runs a sequence of task on start
 // --------------------------------------
 gulp.task('dev', gulp.series(
-  'clean',
+  clean,
   'copy-assets',
   'sassdoc',
   'serve'
@@ -72,14 +72,14 @@ gulp.task('dev', gulp.series(
 // Prepare package folder for publishing
 // -------------------------------------
 gulp.task('build:package', gulp.series(
-  'clean',
+  clean,
   'copy-files',
   'js:compile',
   'js:copy-esm'
 ))
 
 gulp.task('build:dist', gulp.series(
-  'clean',
+  clean,
   'copy-assets',
   'copy:assets',
   'update-assets-version'
