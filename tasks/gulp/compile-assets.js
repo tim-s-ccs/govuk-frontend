@@ -4,7 +4,7 @@ const { componentNameToJavaScriptModuleName } = require('../../lib/helper-functi
 
 const path = require('path')
 
-const gulp = require('gulp')
+const { src, dest, parallel } = require('gulp')
 const configPaths = require('../../config/paths.json')
 const sass = require('gulp-sass')(require('node-sass'))
 const plumber = require('gulp-plumber')
@@ -52,10 +52,10 @@ const errorHandler = function (error) {
   this.emit('end')
 }
 
-function compileStyles (done) {
+function compileStyles () {
   const compileStylesheet = isDist ? configPaths.src + 'all.scss' : configPaths.app + 'assets/scss/app.scss'
 
-  gulp.src(compileStylesheet)
+  return src(compileStylesheet)
     .pipe(plumber(errorHandler))
     .pipe(sass())
     // minify css add vendor prefixes and normalize to compiled css
@@ -75,15 +75,13 @@ function compileStyles (done) {
         extname: '.min.css'
       })
     ))
-    .pipe(gulp.dest(taskArguments.destination + '/'))
-
-  done()
+    .pipe(dest(taskArguments.destination + '/'))
 }
 
-function compileOldIE (done) {
+function compileOldIE () {
   const compileOldIeStylesheet = isDist ? configPaths.src + 'all-ie8.scss' : configPaths.app + 'assets/scss/app-ie8.scss'
 
-  gulp.src(compileOldIeStylesheet)
+  return src(compileOldIeStylesheet)
     .pipe(plumber(errorHandler))
     .pipe(sass())
     // minify css add vendor prefixes and normalize to compiled css
@@ -114,13 +112,11 @@ function compileOldIE (done) {
         extname: '.min.css'
       })
     ))
-    .pipe(gulp.dest(taskArguments.destination + '/'))
-
-  done()
+    .pipe(dest(taskArguments.destination + '/'))
 }
 
 function compileLegacy (done) {
-  gulp.src(path.join(configPaths.app, 'assets/scss/app-legacy.scss'))
+  return src(path.join(configPaths.app, 'assets/scss/app-legacy.scss'))
     .pipe(plumber(errorHandler))
     .pipe(sass({
       includePaths: ['node_modules/govuk_frontend_toolkit/stylesheets', 'node_modules']
@@ -131,13 +127,11 @@ function compileLegacy (done) {
       // :hover class you can use to simulate the hover state in the review app
       postcsspseudoclasses
     ]))
-    .pipe(gulp.dest(taskArguments.destination + '/'))
-
-  done()
+    .pipe(dest(taskArguments.destination + '/'))
 }
 
-function compileLegacyIE (done) {
-  gulp.src(path.join(configPaths.app, 'assets/scss/app-legacy-ie8.scss'))
+function compileLegacyIE () {
+  return src(path.join(configPaths.app, 'assets/scss/app-legacy-ie8.scss'))
     .pipe(plumber(errorHandler))
     .pipe(sass({
       includePaths: ['node_modules/govuk_frontend_toolkit/stylesheets', 'node_modules']
@@ -152,43 +146,38 @@ function compileLegacyIE (done) {
         pseudo: { disable: true }
       })
     ]))
-    .pipe(gulp.dest(taskArguments.destination + '/'))
-
-  done()
+    .pipe(dest(taskArguments.destination + '/'))
 }
 
-function compileFullPageStyles (done) {
+function compileFullPageStyles () {
   const compileFullPageExampleStylesheets = configPaths.fullPageExamples + '**/styles.scss'
 
-  gulp.src(compileFullPageExampleStylesheets)
+  return src(compileFullPageExampleStylesheets)
     .pipe(plumber(errorHandler))
     .pipe(sass())
     .pipe(rename(function (path) {
       path.basename = path.dirname
       path.dirname = ''
     }))
-    .pipe(gulp.dest(taskArguments.destination + '/full-page-examples/'))
-
-  done()
+    .pipe(dest(taskArguments.destination + '/full-page-examples/'))
 }
 
-gulp.task('scss:compile', function (done) {
-  // Default tasks if compiling for dist
-  var tasks = gulp.parallel(compileStyles, compileOldIE)
+function scssCompile (done) {
+  var tasks = parallel(compileStyles, compileOldIE)
 
   if (isPublic) {
-    tasks = gulp.parallel(compileStyles, compileOldIE, compileLegacy, compileLegacyIE, compileFullPageStyles)
+    tasks = parallel(compileStyles, compileOldIE, compileLegacy, compileLegacyIE, compileFullPageStyles)
   } else if (!isDist) {
-    tasks = gulp.parallel(compileStyles, compileOldIE, compileLegacy, compileLegacyIE)
+    tasks = parallel(compileStyles, compileOldIE, compileLegacy, compileLegacyIE)
   }
 
   tasks()
   done()
-})
+}
 
 // Compile js task for preview ----------
 // --------------------------------------
-gulp.task('js:compile', (done) => {
+function jsCompile (done) {
   // For dist/ folder we only want compiled 'all.js'
   const fileLookup = isDist ? configPaths.src + 'all.mjs' : configPaths.src + '**/!(*.test).mjs'
 
@@ -206,7 +195,7 @@ gulp.task('js:compile', (done) => {
       moduleName = componentNameToJavaScriptModuleName(path.parse(file).name)
     }
 
-    return gulp.src(file)
+    return src(file)
       .pipe(rollup({
         // Used to set the `window` global and UMD/AMD export name
         // Component JavaScript is given a unique name to aid individual imports, e.g GOVUKFrontend.Accordion
@@ -229,7 +218,15 @@ gulp.task('js:compile', (done) => {
         extname: '.js'
       }))
       .pipe(eol())
-      .pipe(gulp.dest(destinationPath() + newDirectoryPath))
+      .pipe(dest(destinationPath() + newDirectoryPath))
   })
   done()
-})
+}
+
+exports.compileStyles = compileStyles
+exports.compileOldIE = compileOldIE
+exports.compileLegacy = compileLegacy
+exports.compileLegacyIE = compileLegacyIE
+exports.compileFullPageStyles = compileFullPageStyles
+exports.scssCompile = scssCompile
+exports.jsCompile = jsCompile

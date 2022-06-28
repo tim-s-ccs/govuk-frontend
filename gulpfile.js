@@ -7,7 +7,7 @@ const taskArguments = require('./tasks/gulp/task-arguments')
 
 // Gulp sub-tasks
 const { clean } = require('./tasks/gulp/clean.js')
-require('./tasks/gulp/compile-assets.js')
+const { jsCompile, scssCompile } = require('./tasks/gulp/compile-assets.js')
 const { jsLint, scssLint } = require('./tasks/gulp/lint.js')
 const { nodemon } = require('./tasks/gulp/nodemon.js')
 const { watchFiles } = require('./tasks/gulp/watch.js')
@@ -21,7 +21,7 @@ require('./tasks/gulp/sassdoc.js')
 // --------------------------------------
 gulp.task('scripts', gulp.series(
   jsLint,
-  'js:compile'
+  jsCompile
 ))
 
 // Umbrella styles tasks for preview ----
@@ -29,7 +29,7 @@ gulp.task('scripts', gulp.series(
 // --------------------------------------
 gulp.task('styles', gulp.series(
   scssLint,
-  'scss:compile'
+  scssCompile
 ))
 
 // Copy assets task ----------------------
@@ -74,7 +74,7 @@ gulp.task('dev', gulp.series(
 gulp.task('build:package', gulp.series(
   clean,
   'copy-files',
-  'js:compile',
+  jsCompile,
   'js:copy-esm'
 ))
 
