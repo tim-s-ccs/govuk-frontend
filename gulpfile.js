@@ -14,7 +14,7 @@ const { watchFiles } = require('./tasks/gulp/watch.js')
 // new tasks
 const { copyFiles, jsCopyEsm } = require('./tasks/gulp/copy-to-destination.js')
 const { updateAssetsVersion } = require('./tasks/gulp/asset-version.js')
-require('./tasks/gulp/sassdoc.js')
+const { startSassdoc } = require('./tasks/gulp/sassdoc.js')
 
 // Umbrella scripts tasks for preview ---
 // Runs js lint and compilation
@@ -64,7 +64,7 @@ gulp.task('serve', gulp.parallel(
 gulp.task('dev', gulp.series(
   clean,
   'copy-assets',
-  'sassdoc',
+  startSassdoc,
   'serve'
 ))
 
