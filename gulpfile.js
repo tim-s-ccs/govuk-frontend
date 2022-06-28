@@ -12,7 +12,7 @@ const { jsLint, scssLint } = require('./tasks/gulp/lint.js')
 const { nodemon } = require('./tasks/gulp/nodemon.js')
 const { watchFiles } = require('./tasks/gulp/watch.js')
 // new tasks
-require('./tasks/gulp/copy-to-destination.js')
+const { copyFiles, jsCopyEsm } = require('./tasks/gulp/copy-to-destination.js')
 const { updateAssetsVersion } = require('./tasks/gulp/asset-version.js')
 require('./tasks/gulp/sassdoc.js')
 
@@ -73,9 +73,9 @@ gulp.task('dev', gulp.series(
 // -------------------------------------
 gulp.task('build:package', gulp.series(
   clean,
-  'copy-files',
+  copyFiles,
   jsCompile,
-  'js:copy-esm'
+  jsCopyEsm
 ))
 
 gulp.task('build:dist', gulp.series(

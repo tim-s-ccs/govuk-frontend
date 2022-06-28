@@ -1,7 +1,7 @@
 'use strict'
 
 const nunjucks = require('nunjucks')
-const gulp = require('gulp')
+const { src, dest } = require('gulp')
 const configPaths = require('../../config/paths.json')
 const postcss = require('gulp-postcss')
 const autoprefixer = require('autoprefixer')
@@ -16,8 +16,8 @@ const rename = require('gulp-rename')
 const scssFiles = filter([configPaths.src + '**/*.scss'], { restore: true })
 const yamlFiles = filter([configPaths.components + '**/*.yaml'], { restore: true })
 
-gulp.task('copy-files', () => {
-  return gulp.src([
+function copyFiles () {
+  return src([
     configPaths.src + '**/*',
     '!**/.DS_Store',
     '!**/*.mjs',
@@ -50,8 +50,8 @@ gulp.task('copy-files', () => {
       path.extname = '.json'
     }))
     .pipe(yamlFiles.restore)
-    .pipe(gulp.dest(taskArguments.destination + '/govuk/'))
-})
+    .pipe(dest(taskArguments.destination + '/govuk/'))
+}
 
 function generateFixtures (file) {
   const json = convertYamlToJson(file)
@@ -86,10 +86,10 @@ function generateFixtures (file) {
   }
 }
 
-gulp.task('js:copy-esm', () => {
-  return gulp.src([configPaths.src + '**/*.mjs', configPaths.src + '**/*.js', '!' + configPaths.src + '/**/*.test.js'])
-    .pipe(gulp.dest(taskArguments.destination + '/govuk-esm/'))
-})
+function jsCopyEsm () {
+  return src([configPaths.src + '**/*.mjs', configPaths.src + '**/*.js', '!' + configPaths.src + '/**/*.test.js'])
+    .pipe(dest(taskArguments.destination + '/govuk-esm/'))
+}
 
 function generateMacroOptions (file) {
   const json = convertYamlToJson(file)
@@ -124,3 +124,6 @@ function convertYamlToJson (file) {
 
   return false
 }
+
+exports.copyFiles = copyFiles
+exports.jsCopyEsm = jsCopyEsm
