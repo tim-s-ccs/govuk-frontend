@@ -9,7 +9,7 @@ const taskArguments = require('./tasks/gulp/task-arguments')
 const { clean } = require('./tasks/gulp/clean.js')
 require('./tasks/gulp/compile-assets.js')
 require('./tasks/gulp/lint.js')
-require('./tasks/gulp/nodemon.js')
+const { nodemon } = require('./tasks/gulp/nodemon.js')
 const { watchFiles } = require('./tasks/gulp/watch.js')
 // new tasks
 require('./tasks/gulp/copy-to-destination.js')
@@ -55,7 +55,7 @@ gulp.task('copy-assets', gulp.series(
 // --------------------------------------
 gulp.task('serve', gulp.parallel(
   watchFiles,
-  'nodemon'
+  nodemon
 ))
 
 // Dev task -----------------------------

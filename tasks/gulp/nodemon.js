@@ -1,5 +1,4 @@
 'use strict'
-const gulp = require('gulp')
 const nodemon = require('nodemon')
 const paths = require('../../config/paths.json')
 
@@ -7,7 +6,7 @@ const paths = require('../../config/paths.json')
 // Restarts node app for changes affecting
 // js and json files
 // ---------------------------------------
-gulp.task('nodemon', () => {
+function startNodemon (cb) {
   return nodemon({
     watch: [
       paths.app,
@@ -15,4 +14,6 @@ gulp.task('nodemon', () => {
     ],
     script: 'app/start.js'
   })
-})
+}
+
+exports.nodemon = startNodemon
