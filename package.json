@@ -60,7 +60,7 @@
     "jest-puppeteer": "^6.0.2",
     "jest-serializer-html": "^7.0.0",
     "jquery": "1.12.4",
-    "js-yaml": "^3.14.0",
+    "js-yaml": "^4.1.0",
     "map-stream": "0.0.7",
     "marked": "^4.0.10",
     "node-sass": "^7.0.1",
