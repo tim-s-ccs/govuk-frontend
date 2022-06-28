@@ -8,7 +8,7 @@ const taskArguments = require('./tasks/gulp/task-arguments')
 // Gulp sub-tasks
 const { clean } = require('./tasks/gulp/clean.js')
 require('./tasks/gulp/compile-assets.js')
-require('./tasks/gulp/lint.js')
+const { jsLint, scssLint } = require('./tasks/gulp/lint.js')
 const { nodemon } = require('./tasks/gulp/nodemon.js')
 const { watchFiles } = require('./tasks/gulp/watch.js')
 // new tasks
@@ -20,7 +20,7 @@ require('./tasks/gulp/sassdoc.js')
 // Runs js lint and compilation
 // --------------------------------------
 gulp.task('scripts', gulp.series(
-  'js:lint',
+  jsLint,
   'js:compile'
 ))
 
@@ -28,7 +28,7 @@ gulp.task('scripts', gulp.series(
 // Runs scss lint and compilation
 // --------------------------------------
 gulp.task('styles', gulp.series(
-  'scss:lint',
+  scssLint,
   'scss:compile'
 ))
 
